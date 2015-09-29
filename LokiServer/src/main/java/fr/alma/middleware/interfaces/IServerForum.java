@@ -1,5 +1,6 @@
 package fr.alma.middleware.interfaces;
 
+import java.util.List;
 import java.rmi.*;
 
 public interface IServerForum extends Remote {
