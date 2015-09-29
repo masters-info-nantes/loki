@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fr.alma.middleware</groupId>
-  <artifactId>Loki</artifactId>
+  <artifactId>LokiClient</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Loki</name>
+  <name>LokiClient</name>
   <url>http://maven.apache.org</url>
 
   <properties>
