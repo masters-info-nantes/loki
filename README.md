@@ -4,7 +4,25 @@
 
 ##Compile & run
 
+### Install common part
+
 ```
+$ cd common
+$ mvn install
+```
+
+### Run server
+
+```
+$ rmiregistry &
+$ cd server
+$ mvn compile exec:java
+```
+
+### Run client
+
+```
+$ cd client
 $ mvn compile exec:java
 ```
 
