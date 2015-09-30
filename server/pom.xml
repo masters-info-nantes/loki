@@ -45,7 +45,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>fr.alma.middleware.loki.interfaces</groupId>
+      <groupId>fr.alma.middleware.loki.common</groupId>
       <artifactId>LokiInterfaces</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
