@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.rmi.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.Permission;
 
 public class RMIServer {
 
@@ -17,6 +18,16 @@ public class RMIServer {
 	private static RMIServer instance;
 
 	public static RMIServer getInstance() throws RemoteException {
+		// create a Security Manager that allow everything
+		if (System.getSecurityManager() == null) {
+			System.setSecurityManager(new SecurityManager() {
+				@Override
+				public void checkPermission(Permission perm) {
+					return;
+				}
+			});
+		}
+		
 		if(RMIServer.instance == null){
 			RMIServer.instance = new RMIServer();
 		}

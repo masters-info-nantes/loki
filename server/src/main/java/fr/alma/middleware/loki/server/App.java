@@ -1,6 +1,7 @@
 package fr.alma.middleware.loki.server;
 
 import java.rmi.RemoteException;
+import java.rmi.RMISecurityManager;
 
 public class App {
 	

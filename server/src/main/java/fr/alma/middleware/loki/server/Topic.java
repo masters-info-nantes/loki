@@ -26,6 +26,7 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	}
 	
 	public void broadcast(Message message) throws RemoteException {
+		System.out.println("broadcast : ["+message.getAuthor()+" : "+message.getMessage()+"]");
 		for(IClient client : this.subscribers){
             client.newMessage(message);
         }

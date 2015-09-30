@@ -17,7 +17,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		super();
 		this.topics = new HashMap<String, ITopic>();
 		try {
-			createTopic("General");
+			createTopic(ITopic.GENERAL_TOPIC_NAME);
 		}catch(TopicAlreadyExistedException e) {}
 	}
 	
