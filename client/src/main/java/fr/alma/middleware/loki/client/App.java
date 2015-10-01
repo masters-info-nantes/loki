@@ -1,9 +1,9 @@
 package fr.alma.middleware.loki.client;
 
 import fr.alma.middleware.loki.client.gui.MainWindow;
-import fr.alma.middleware.loki.common.*;
-
-import java.awt.Color;
+import fr.alma.middleware.loki.common.IServer;
+import fr.alma.middleware.loki.common.ITopic;
+import fr.alma.middleware.loki.common.Message;
 
 public class App {
 	public static void main(String[] args) {

@@ -1,11 +1,12 @@
 package fr.alma.middleware.loki.client;
 
-import fr.alma.middleware.loki.client.gui.*;
-import fr.alma.middleware.loki.common.*;
+import fr.alma.middleware.loki.client.gui.MainWindow;
+import fr.alma.middleware.loki.common.IClient;
+import fr.alma.middleware.loki.common.Message;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.rmi.*;
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Random;

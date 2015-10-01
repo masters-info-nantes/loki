@@ -1,8 +1,17 @@
 package fr.alma.middleware.loki.client.gui;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
 
 public class MainWindow extends JFrame {

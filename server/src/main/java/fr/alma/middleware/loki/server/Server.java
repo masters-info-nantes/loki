@@ -1,6 +1,9 @@
 package fr.alma.middleware.loki.server;
 
-import fr.alma.middleware.loki.common.*;
+import fr.alma.middleware.loki.common.IServer;
+import fr.alma.middleware.loki.common.ITopic;
+import fr.alma.middleware.loki.common.Message;
+import fr.alma.middleware.loki.common.TopicAlreadyExistedException;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -15,10 +18,15 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	
 	public Server() throws RemoteException {
 		super();
+
 		this.topics = new HashMap<String, ITopic>();
+
 		try {
 			createTopic(ITopic.GENERAL_TOPIC_NAME);
-		}catch(TopicAlreadyExistedException e) {}
+		}
+		catch(TopicAlreadyExistedException e) {
+			System.err.println("[Server] General topic already exists");
+		}
 	}
 	
 	public ITopic getTopic(String title) throws RemoteException {
@@ -30,11 +38,14 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	}
 	
 	public ITopic createTopic(String title) throws RemoteException,TopicAlreadyExistedException {
-		ITopic topic = new Topic();
-		if(this.topics.get(title) != null) {
+
+		if(this.topics.containsKey(title)) {
 			throw new TopicAlreadyExistedException();
 		}
-		this.topics.put(title,topic);
+
+		ITopic topic = new Topic();
+		this.topics.put(title, topic);
+
 		return topic;
 	}
 }
