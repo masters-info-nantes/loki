@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Message extends UnicastRemoteObject implements Serializable {
+public class Message implements Serializable {
 	private String author;
 	private String message;
 	
-	public Message(String author, String message) throws RemoteException {
-		super();
+	public Message(String author, String message) {
 		this.author = author;
 		this.message = message;
 	}

@@ -77,5 +77,4 @@ public class MainWindow extends JFrame {
 	public void setMessage(String message) {
 		this.message.setText(message);
 	}
-	
 }

@@ -1,7 +1,5 @@
 # Loki
 
-[Topic on Google Drive](https://drive.google.com/open?id=1ChTgiOZ7ieZ1C9buxMmwlk4wNUYvgQPd9HyDwfu_t7s)
-
 ##Compile & run
 
 ### Install common part

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
@@ -27,8 +28,14 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	
 	public void broadcast(Message message) throws RemoteException {
 		System.out.println("broadcast ["+message.getAuthor()+" : "+message.getMessage()+"]");
+		LinkedList offline = new LinkedList<IClient>();
 		for(IClient client : this.subscribers){
-            client.newMessage(message);
+			try {
+				client.newMessage(message);
+			} catch(Exception ex) {
+				offline.add(client);
+			}
         }
+        this.subscribers.removeAll(offline);
 	}
 }

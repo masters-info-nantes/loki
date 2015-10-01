@@ -28,6 +28,6 @@ public class Client extends UnicastRemoteObject implements IClient,Serializable 
 			Color c = new Color(rand.nextInt(256),rand.nextInt(256),rand.nextInt(256));
 			this.usersColor.put(message.getAuthor(),c);
 		}
-		this.display.appendToHistory(message.getAuthor()+" : "+message.getMessage(),this.usersColor.get(message.getAuthor()));
+		this.display.appendToHistory("\n"+message.getAuthor()+" : "+message.getMessage(),this.usersColor.get(message.getAuthor()));
 	}
 }
