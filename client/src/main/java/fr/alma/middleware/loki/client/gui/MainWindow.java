@@ -1,65 +1,74 @@
 package fr.alma.middleware.loki.client.gui;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 
 
 public class MainWindow extends JFrame {
 	
-	private String title;
-	
-	private Box boxFirstLine;
-	private Box boxLastLine;
-	
-	private JLabel nicknameLabel;
-	private JTextField nickname;
-	private JTextPane history;
-	private JTextField message;
-	private JButton send;
+	private JLabel labelNickname;
+
+	private JTextField textNickname;
+	private JTextField textMessage;
+
+	private JTextPane textHistory;
+
+	private JButton buttonSend;
 	
 	public MainWindow(String title) {
-		this.title = title;
-		setTitle(this.title);
-		setSize(400, 600);
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
-		nicknameLabel = new JLabel();
-		nicknameLabel.setText("Nickname :");
-		nickname = new JTextField();
-		history = new JTextPane();
-		message = new JTextField();
-		send = new JButton();
-		send.setText("Send");
 
-		boxFirstLine = Box.createHorizontalBox();
-		boxFirstLine.add(nicknameLabel);
-		boxFirstLine.add(nickname);
-		boxLastLine = Box.createHorizontalBox();
-		boxLastLine.add(message);
-		boxLastLine.add(send);
-		getContentPane().add(boxFirstLine,BorderLayout.NORTH);
-		getContentPane().add(history,BorderLayout.CENTER);
-		getContentPane().add(boxLastLine,BorderLayout.SOUTH);
-		
-		setVisible(true);
+		super(title);
+
+		this.labelNickname = new JLabel();
+		this.labelNickname.setText("Nickname :");
+
+		this.textNickname = new JTextField();
+		this.textHistory = new JTextPane();
+		this.textMessage = new JTextField();
+
+		this.buttonSend = new JButton();
+		this.buttonSend.setText("Send");
+
+		Box boxFirstLine = Box.createHorizontalBox();
+		boxFirstLine.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+		boxFirstLine.add(this.labelNickname);
+		boxFirstLine.add(this.textNickname);
+
+		Box boxLastLine = Box.createHorizontalBox();
+		boxLastLine.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+		boxLastLine.add(this.textMessage);
+		boxLastLine.add(this.buttonSend);
+
+		Container windowContainer = super.getContentPane();
+		windowContainer.add(boxFirstLine, BorderLayout.NORTH);
+		windowContainer.add(this.textHistory, BorderLayout.CENTER);
+		windowContainer.add(boxLastLine, BorderLayout.SOUTH);
+
+		super.setSize(400, 600);
+		super.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		super.setVisible(true);
 	}
 	
-	public String getNickname() {
-		return this.nickname.getText();
+	public String getTextNickname() {
+		return this.textNickname.getText();
 	}
 	
 	public String getMessage() {
-		return this.message.getText();
+		return this.textMessage.getText();
 	}
 	
 	public void appendToHistory(String text) {
@@ -73,17 +82,17 @@ public class MainWindow extends JFrame {
 		aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
 		aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
 		
-		int len = this.history.getDocument().getLength();
-		this.history.setCaretPosition(len);
-		this.history.setCharacterAttributes(aset, false);
-		this.history.replaceSelection(text);
+		int len = this.textHistory.getDocument().getLength();
+		this.textHistory.setCaretPosition(len);
+		this.textHistory.setCharacterAttributes(aset, false);
+		this.textHistory.replaceSelection(text);
     }
 	
 	public void setNickname(String nickname) {
-		this.nickname.setText(nickname);
+		this.textNickname.setText(nickname);
 	}
 	
 	public void setMessage(String message) {
-		this.message.setText(message);
+		this.textMessage.setText(message);
 	}
 }

@@ -23,12 +23,17 @@ public class Client extends UnicastRemoteObject implements IClient,Serializable 
 	}
 	
 	public void newMessage(Message message) throws RemoteException {
-		System.out.println(message.getAuthor()+" : "+message.getMessage());
+		System.out.println("[Client] " + message.getAuthor() + " : " + message.getMessage());
+
 		if(!this.usersColor.containsKey(message.getAuthor())) {
 			Random rand = new Random();
 			Color c = new Color(rand.nextInt(256),rand.nextInt(256),rand.nextInt(256));
 			this.usersColor.put(message.getAuthor(),c);
 		}
-		this.display.appendToHistory("\n"+message.getAuthor()+" : "+message.getMessage(),this.usersColor.get(message.getAuthor()));
+
+		this.display.appendToHistory(
+			"\n" + message.getAuthor() + " : " + message.getMessage(),
+			this.usersColor.get(message.getAuthor())
+		);
 	}
 }
