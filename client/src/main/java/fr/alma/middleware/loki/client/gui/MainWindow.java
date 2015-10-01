@@ -63,7 +63,7 @@ public class MainWindow extends JFrame {
 		super.setVisible(true);
 	}
 	
-	public String getTextNickname() {
+	public String getNickname() {
 		return this.textNickname.getText();
 	}
 	
