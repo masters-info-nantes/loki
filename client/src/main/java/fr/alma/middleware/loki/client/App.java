@@ -10,7 +10,7 @@ public class App {
 		MainWindow window = new MainWindow("Loki chat");
 		
 		try {
-			Client client = new Client();
+			Client client = new Client(window);
 			
 			RMIClient rmi = RMIClient.getInstance();
 			IServer server = (IServer) rmi.retrieve("Server");
@@ -18,7 +18,7 @@ public class App {
 			System.out.println("Topics list: " + server.getTopicList());
 			ITopic topicGeneral = server.getTopic(ITopic.GENERAL_TOPIC_NAME);
 			
-			//~ topicGeneral.subscribe(client);
+			topicGeneral.subscribe(client);
 			
 			topicGeneral.broadcast(new Message("Doctor","TARDIS!"));
 		}

@@ -1,17 +1,20 @@
 package fr.alma.middleware.loki.common;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class Message implements Serializable {
+public class Message extends UnicastRemoteObject implements Serializable {
 	private String author;
 	private String message;
 	
-	public Message(String author, String message) {
+	public Message(String author, String message) throws RemoteException {
+		super();
 		this.author = author;
 		this.message = message;
 	}
 	
-	public Message() {
+	public Message() throws RemoteException {
 		this("","");
 	}
 	
