@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,7 @@ public class MainWindow extends JFrame {
 	private JTextField textNickname;
 	private JTextField textMessage;
 
+	private JScrollPane scrollHistory;
 	private JTextPane textHistory;
 
 	private JButton buttonSend;
@@ -39,6 +41,11 @@ public class MainWindow extends JFrame {
 
 		this.textNickname = new JTextField();
 		this.textHistory = new JTextPane();
+		this.scrollHistory = new JScrollPane(
+			this.textHistory,
+			JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+		);
 		this.textMessage = new JTextField();
 
 		this.buttonSend = new JButton();
@@ -56,7 +63,7 @@ public class MainWindow extends JFrame {
 
 		Container windowContainer = super.getContentPane();
 		windowContainer.add(boxFirstLine, BorderLayout.NORTH);
-		windowContainer.add(this.textHistory, BorderLayout.CENTER);
+		windowContainer.add(this.scrollHistory, BorderLayout.CENTER);
 		windowContainer.add(boxLastLine, BorderLayout.SOUTH);
 
 		super.setSize(400, 600);
