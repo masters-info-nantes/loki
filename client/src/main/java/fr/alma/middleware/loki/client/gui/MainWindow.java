@@ -100,4 +100,20 @@ public class MainWindow extends JFrame {
 	public void listenSendButton(ActionListener listener) {
 		this.buttonSend.addActionListener(listener);
 	}
+	
+	/** Sets topic name in window title
+	 * @param topicName The new topic name of the window. If {@code null} remove topic name in window title.
+	 */
+	public void setCurrentTopicName(String topicName) {
+		String originalTitle = this.getTitle();
+		int indexSeperator = originalTitle.lastIndexOf(" -- ");
+		if(indexSeperator != -1) {
+			originalTitle = originalTitle.substring(0,indexSeperator);
+		}
+		if(topicName != null) {
+			this.setTitle(originalTitle+" -- "+topicName);
+		} else {
+			this.setTitle(originalTitle);
+		}
+	}
 }

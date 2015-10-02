@@ -46,7 +46,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 	public void addSubscribedTopic(String topicName, ITopic topic) {
 		this.subscribedTopics.put(topicName, topic);
 		if(this.currentTopic == null) {
-			this.currentTopic = topicName;
+			this.setCurrentTopic(topicName);
 		}
 	}
 	
@@ -54,6 +54,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 		ITopic topic = this.subscribedTopics.get(topicName);
 		if(topic != null) {
 			this.currentTopic = topicName;
+			this.display.setCurrentTopicName(topicName);
 		}
 	}
 	
