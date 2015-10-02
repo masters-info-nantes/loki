@@ -16,6 +16,7 @@ import javax.swing.text.StyleContext;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionListener;
 
 
 public class MainWindow extends JFrame {
@@ -94,5 +95,9 @@ public class MainWindow extends JFrame {
 	
 	public void setMessage(String message) {
 		this.textMessage.setText(message);
+	}
+	
+	public void listenSendButton(ActionListener listener) {
+		this.buttonSend.addActionListener(listener);
 	}
 }

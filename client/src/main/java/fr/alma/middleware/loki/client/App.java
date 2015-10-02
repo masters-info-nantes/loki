@@ -11,6 +11,7 @@ public class App {
 		
 		try {
 			Client client = new Client(window);
+			window.listenSendButton(client);
 			
 			RMIClient rmi = RMIClient.getInstance();
 			IServer server = (IServer) rmi.retrieve("Server");
@@ -19,8 +20,7 @@ public class App {
 			ITopic topicGeneral = server.getTopic(ITopic.GENERAL_TOPIC_NAME);
 			
 			topicGeneral.subscribe(client);
-			
-			topicGeneral.broadcast(new Message("Doctor","TARDIS!"));
+			client.addSubscribedTopic(ITopic.GENERAL_TOPIC_NAME,topicGeneral);
 		}
 		catch (Exception e) {
 			System.err.println("Can't access to the server");
