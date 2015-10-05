@@ -26,6 +26,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 public class MainWindow extends JFrame implements WindowListener {
@@ -99,6 +102,12 @@ public class MainWindow extends JFrame implements WindowListener {
 	
 	public void addTopic(String topicName) {
 		this.listTopicModel.addElement(topicName);
+		List allTopics = Arrays.asList(this.listTopicModel.toArray());
+		this.listTopicModel.removeAllElements();
+		Collections.sort(allTopics);
+		for(Object topic : allTopics) {
+			this.listTopicModel.addElement((String)topic);
+		}
 	}
 	
 	public void removeTopic(String topicName) {
