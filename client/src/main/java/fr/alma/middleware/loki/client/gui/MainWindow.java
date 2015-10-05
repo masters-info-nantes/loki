@@ -59,9 +59,11 @@ public class MainWindow extends JFrame implements WindowListener {
 		this.listTopic.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				JList list = (JList)evt.getSource();
+				int index = list.locationToIndex(evt.getPoint());
 				if (evt.getClickCount() == 2) {
-					int index = list.locationToIndex(evt.getPoint());
 					openTopic(index);
+				} else if(evt.getButton() == 3) {
+					deleteTopic(index);
 				}
 			}
 		});
@@ -137,6 +139,11 @@ public class MainWindow extends JFrame implements WindowListener {
 	public void openTopic(int index) {
 		String topicName = this.listTopicModel.get(index);
 		this.client.openTopic(topicName);
+	}
+	
+	public void deleteTopic(int index) {
+		String topicName = this.listTopicModel.get(index);
+		this.client.deleteTopic(topicName);
 	}
 	
 	// WindowListener methods

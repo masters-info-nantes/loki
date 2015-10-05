@@ -15,9 +15,8 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class Client extends UnicastRemoteObject implements IClient,ActionListener,Serializable {
 	
@@ -26,7 +25,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 	private HashMap<String,Color> usersColor;
 	private String currentTopic;
 	private HashMap<String,ITopic> subscribedTopics;
-	private List<ClientTopic> childs;
+	private HashMap<ITopic,ClientTopic> childs;
 	
 	public Client(IServer server, MainWindow display) throws RemoteException {
 		super();
@@ -35,7 +34,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 		this.display.setClient(this);
 		this.usersColor = new HashMap<String,Color>();
 		this.subscribedTopics = new HashMap<String,ITopic>();
-		this.childs = new LinkedList<ClientTopic>();
+		this.childs = new HashMap<ITopic,ClientTopic>();
 	}
 		
 	public Color getUserColor(String nickname) {
@@ -97,7 +96,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 			TopicWindow topicWindow = new TopicWindow(this.display.getTitle());
 			topicWindow.setCurrentTopicName(topic.getName());
 			ClientTopic clientTopic = new ClientTopic(this,topicWindow);
-			this.childs.add(clientTopic);
+			this.childs.put(topic,clientTopic);
 			
 			topic.subscribe(clientTopic);
 			clientTopic.setCurrentTopic(topic);
@@ -106,8 +105,31 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 		}
 	}
 	
+	public void deleteTopic(String topicName) {
+		int response = JOptionPane.showConfirmDialog(
+			this.display,
+			"Delete topic \""+topicName+"\"?",
+			"Deleting",
+			JOptionPane.YES_NO_OPTION
+		);
+		if(response == JOptionPane.YES_OPTION) {
+			try {
+				ITopic topic = this.server.getTopic(topicName);
+				if(this.childs.containsKey(topic)) {
+					this.subscribedTopics.remove(topicName);
+					ClientTopic child = this.childs.remove(topic);
+					child.close();
+				}
+				
+				this.server.removeTopic(topic);
+			} catch(RemoteException ex) {
+				System.err.println("Can't remove topic "+topicName);
+			}
+		}
+	}
+	
 	public void unregister() {
-		for(ClientTopic child : childs) {
+		for(ClientTopic child : childs.values()) {
 			child.close();
 		}
 		

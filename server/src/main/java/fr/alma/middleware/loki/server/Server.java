@@ -57,6 +57,16 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		return topic;
 	}
 	
+	public void removeTopic(ITopic topic) throws RemoteException {
+		ITopic previous = this.topics.remove(topic.getName());
+		
+		if(previous != null) {
+			for(IClient client : this.clients) {
+				client.topicRemoved(topic);
+			}
+		}
+	}
+	
 	public void registerClient(IClient client) throws RemoteException {
 		this.clients.add(client);
 		for(ITopic topic : this.topics.values()) {
