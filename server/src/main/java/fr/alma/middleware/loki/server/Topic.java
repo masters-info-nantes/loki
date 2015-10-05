@@ -1,6 +1,6 @@
 package fr.alma.middleware.loki.server;
 
-import fr.alma.middleware.loki.common.IClient;
+import fr.alma.middleware.loki.common.IClientTopic;
 import fr.alma.middleware.loki.common.ITopic;
 import fr.alma.middleware.loki.common.Message;
 
@@ -16,13 +16,13 @@ import java.util.Set;
 public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	
 	private String name;
-	private Set<IClient> subscribers;
+	private Set<IClientTopic> subscribers;
 	private List<Message> messageHistory;
 	
 	public Topic(String name) throws RemoteException {
         super();
 		this.name = name;
-        this.subscribers = new HashSet<IClient>();
+        this.subscribers = new HashSet<IClientTopic>();
 		this.messageHistory = new ArrayList<Message>();
     }
 	
@@ -35,23 +35,21 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	}
 
 	@Override
-	public void subscribe(IClient client) throws RemoteException {
+	public void subscribe(IClientTopic client) throws RemoteException {
 		this.subscribers.add(client);
 	}
 
 	@Override
-	public void unsubscribe(IClient client) throws RemoteException {
+	public void unsubscribe(IClientTopic client) throws RemoteException {
 		this.subscribers.remove(client);
 	}
 
 	@Override
 	public void broadcast(Message message) throws RemoteException {
-
-		System.out.println("[Topic] broadcast [" + message.getAuthor() + " : " + message.getMessage() + "]");
 		this.messageHistory.add(message);
 
-		LinkedList offlineClients = new LinkedList<IClient>();
-		for(IClient client : this.subscribers){
+		LinkedList offlineClients = new LinkedList<IClientTopic>();
+		for(IClientTopic client : this.subscribers){
 			try {
 				client.newMessage(message);
 			}

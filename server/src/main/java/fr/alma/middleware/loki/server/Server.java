@@ -1,5 +1,6 @@
 package fr.alma.middleware.loki.server;
 
+import fr.alma.middleware.loki.common.IClient;
 import fr.alma.middleware.loki.common.IServer;
 import fr.alma.middleware.loki.common.ITopic;
 import fr.alma.middleware.loki.common.Message;
@@ -10,15 +11,18 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Server extends UnicastRemoteObject implements IServer,Serializable {
 
 	private HashMap<String, ITopic> topics;
+	private List<IClient> clients;
 	
 	public Server() throws RemoteException {
 		super();
 
+		this.clients = new LinkedList<IClient>();
 		this.topics = new HashMap<String, ITopic>();
 
 		try {
@@ -33,7 +37,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		return this.topics.get(title);
 	}
 	
-	public List<Message> getTopicList() throws RemoteException {
+	public List<String> getTopicList() throws RemoteException {
 		return new ArrayList(this.topics.keySet());
 	}
 	
@@ -45,7 +49,22 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 
 		ITopic topic = new Topic(title);
 		this.topics.put(title, topic);
-
+		
+		for(IClient client : this.clients) {
+			client.topicCreated(topic);
+		}
+		
 		return topic;
+	}
+	
+	public void registerClient(IClient client) throws RemoteException {
+		this.clients.add(client);
+		for(ITopic topic : this.topics.values()) {
+			client.topicCreated(topic);
+		}
+	}
+	
+	public void unregisterClient(IClient client) throws RemoteException {
+		this.clients.remove(client);
 	}
 }

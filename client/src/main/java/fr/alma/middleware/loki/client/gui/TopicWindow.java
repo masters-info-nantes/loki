@@ -18,28 +18,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 
-public class TopicWindow extends JFrame {
-	
-	private JLabel labelNickname;
+public class TopicWindow extends JFrame implements WindowListener {
 
-	private JTextField textNickname;
 	private JTextField textMessage;
-
 	private JScrollPane scrollHistory;
 	private JTextPane textHistory;
-
 	private JButton buttonSend;
 	
 	public TopicWindow(String title) {
-
 		super(title);
-
-		this.labelNickname = new JLabel();
-		this.labelNickname.setText("Nickname :");
-
-		this.textNickname = new JTextField();
 		this.textHistory = new JTextPane();
 		this.scrollHistory = new JScrollPane(
 			this.textHistory,
@@ -51,28 +42,19 @@ public class TopicWindow extends JFrame {
 		this.buttonSend = new JButton();
 		this.buttonSend.setText("Send");
 
-		Box boxFirstLine = Box.createHorizontalBox();
-		boxFirstLine.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-		boxFirstLine.add(this.labelNickname);
-		boxFirstLine.add(this.textNickname);
-
 		Box boxLastLine = Box.createHorizontalBox();
 		boxLastLine.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		boxLastLine.add(this.textMessage);
 		boxLastLine.add(this.buttonSend);
 
 		Container windowContainer = super.getContentPane();
-		windowContainer.add(boxFirstLine, BorderLayout.NORTH);
 		windowContainer.add(this.scrollHistory, BorderLayout.CENTER);
 		windowContainer.add(boxLastLine, BorderLayout.SOUTH);
 
 		super.setSize(400, 600);
-		super.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		super.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+		addWindowListener(this);
 		super.setVisible(true);
-	}
-	
-	public String getNickname() {
-		return this.textNickname.getText();
 	}
 	
 	public String getMessage() {
@@ -96,10 +78,6 @@ public class TopicWindow extends JFrame {
 		this.textHistory.replaceSelection(text);
     }
 	
-	public void setNickname(String nickname) {
-		this.textNickname.setText(nickname);
-	}
-	
 	public void setMessage(String message) {
 		this.textMessage.setText(message);
 	}
@@ -122,5 +100,36 @@ public class TopicWindow extends JFrame {
 		} else {
 			this.setTitle(originalTitle);
 		}
+	}
+	
+	// WindowListener methods
+	
+	public void windowActivated(WindowEvent e) {
+		// Nothing to do
+	}
+	
+	public void windowClosed(WindowEvent e) {
+		// Nothing to do
+	}
+
+	public void windowClosing(WindowEvent e) {
+		setVisible(false);
+		dispose();
+	}
+
+	public void windowDeactivated(WindowEvent e) {
+		// Nothing to do
+	}
+
+	public void windowDeiconified(WindowEvent e) {
+		// Nothing to do
+	}
+
+	public void windowIconified(WindowEvent e) {
+		// Nothing to do
+	}
+
+	public void windowOpened(WindowEvent e) {
+		// Nothing to do
 	}
 }

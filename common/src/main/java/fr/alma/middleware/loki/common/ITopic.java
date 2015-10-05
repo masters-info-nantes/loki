@@ -10,8 +10,8 @@ public interface ITopic extends Remote {
 	public String getName() throws RemoteException;
 	public void setName(String name) throws RemoteException;
 	
-	public void subscribe(IClient client) throws RemoteException;
-	public void unsubscribe(IClient client) throws RemoteException;
+	public void subscribe(IClientTopic client) throws RemoteException;
+	public void unsubscribe(IClientTopic client) throws RemoteException;
 	public void broadcast(Message message) throws RemoteException;
 	public List<Message> history() throws RemoteException;
 }
