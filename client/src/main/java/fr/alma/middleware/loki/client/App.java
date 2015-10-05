@@ -21,6 +21,14 @@ public class App {
 			
 			topicGeneral.subscribe(client);
 			client.addSubscribedTopic(ITopic.GENERAL_TOPIC_NAME,topicGeneral);
+
+			topicGeneral.broadcast(new Message("Doctor", topicGeneral, "TARDIS!"));
+			topicGeneral.broadcast(new Message("Toto", topicGeneral, "coucou!"));
+			topicGeneral.broadcast(new Message("Doctor", topicGeneral, "salut!"));
+
+			for(Message mes : topicGeneral.history()){
+				System.out.println(mes.getAuthor()+": "+mes.getMessage());
+			}
 		}
 		catch (Exception e) {
 			System.err.println("Can't access to the server");

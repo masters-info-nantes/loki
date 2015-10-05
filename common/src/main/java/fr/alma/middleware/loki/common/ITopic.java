@@ -1,6 +1,7 @@
 package fr.alma.middleware.loki.common;
 
 import java.rmi.*;
+import java.util.List;
 
 public interface ITopic extends Remote {
 
@@ -12,4 +13,5 @@ public interface ITopic extends Remote {
 	public void subscribe(IClient client) throws RemoteException;
 	public void unsubscribe(IClient client) throws RemoteException;
 	public void broadcast(Message message) throws RemoteException;
+	public List<Message> history() throws RemoteException;
 }
