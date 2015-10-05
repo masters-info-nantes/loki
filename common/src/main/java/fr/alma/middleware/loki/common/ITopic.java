@@ -6,6 +6,9 @@ public interface ITopic extends Remote {
 
 	public static final String GENERAL_TOPIC_NAME = "General";
 	
+	public String getName() throws RemoteException;
+	public void setName(String name) throws RemoteException;
+	
 	public void subscribe(IClient client) throws RemoteException;
 	public void unsubscribe(IClient client) throws RemoteException;
 	public void broadcast(Message message) throws RemoteException;

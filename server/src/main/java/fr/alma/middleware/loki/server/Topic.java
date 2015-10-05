@@ -13,12 +13,22 @@ import java.util.Set;
 
 public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	
+	private String name;
 	private Set<IClient> subscribers;
 	
-	public Topic() throws RemoteException {
+	public Topic(String name) throws RemoteException {
         super();
+		this.name = name;
         this.subscribers = new HashSet<IClient>();
     }
+	
+	public String getName() throws RemoteException {
+		return this.name;
+	}
+	
+	public void setName(String name) throws RemoteException {
+		this.name = name;
+	}
 	
 	public void subscribe(IClient client) throws RemoteException {
 		this.subscribers.add(client);

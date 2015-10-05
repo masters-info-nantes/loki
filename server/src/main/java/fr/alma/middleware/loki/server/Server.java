@@ -43,7 +43,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 			throw new TopicAlreadyExistedException();
 		}
 
-		ITopic topic = new Topic();
+		ITopic topic = new Topic(title);
 		this.topics.put(title, topic);
 
 		return topic;
