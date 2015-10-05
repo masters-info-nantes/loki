@@ -97,14 +97,17 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 	public void openTopic(String topicName) {
 		try {
 			ITopic topic = this.server.getTopic(topicName);
-			
-			TopicWindow topicWindow = new TopicWindow(this.display.getTitle());
-			topicWindow.setCurrentTopicName(topic.getName());
-			ClientTopic clientTopic = new ClientTopic(this,topicWindow);
-			this.childs.put(topic,clientTopic);
-			
-			topic.subscribe(clientTopic);
-			clientTopic.setCurrentTopic(topic);
+			if(!this.childs.containsKey(topic)) {
+				TopicWindow topicWindow = new TopicWindow(this.display.getTitle());
+				topicWindow.setCurrentTopicName(topic.getName());
+				ClientTopic clientTopic = new ClientTopic(this,topicWindow);
+				this.childs.put(topic,clientTopic);
+				
+				topic.subscribe(clientTopic);
+				clientTopic.setCurrentTopic(topic);
+			} else {
+				this.childs.get(topic).bringToFront();
+			}
 		} catch(RemoteException ex) {
 			System.err.println("Can't open new topic");
 		}

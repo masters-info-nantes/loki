@@ -72,4 +72,8 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 	public void close() {
 		this.display.windowClosing(null);
 	}
+	
+	public void bringToFront() {
+		this.display.toFront();
+	}
 }
