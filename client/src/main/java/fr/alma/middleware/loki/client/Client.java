@@ -1,6 +1,6 @@
 package fr.alma.middleware.loki.client;
 
-import fr.alma.middleware.loki.client.gui.MainWindow;
+import fr.alma.middleware.loki.client.gui.TopicWindow;
 import fr.alma.middleware.loki.common.IClient;
 import fr.alma.middleware.loki.common.ITopic;
 import fr.alma.middleware.loki.common.Message;
@@ -16,12 +16,12 @@ import java.util.Random;
 
 public class Client extends UnicastRemoteObject implements IClient,ActionListener,Serializable {
 	
-	private MainWindow display;
+	private TopicWindow display;
 	private HashMap<String,Color> usersColor;
 	private String currentTopic;
 	private HashMap<String,ITopic> subscribedTopics;
 	
-	public Client(MainWindow display) throws RemoteException {
+	public Client(TopicWindow display) throws RemoteException {
 		super();
 		this.display = display;
 		this.usersColor = new HashMap<String,Color>();

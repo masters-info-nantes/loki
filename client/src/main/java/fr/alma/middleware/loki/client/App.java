@@ -1,13 +1,13 @@
 package fr.alma.middleware.loki.client;
 
-import fr.alma.middleware.loki.client.gui.MainWindow;
+import fr.alma.middleware.loki.client.gui.TopicWindow;
 import fr.alma.middleware.loki.common.IServer;
 import fr.alma.middleware.loki.common.ITopic;
 import fr.alma.middleware.loki.common.Message;
 
 public class App {
 	public static void main(String[] args) {
-		MainWindow window = new MainWindow("Loki chat");
+		TopicWindow window = new TopicWindow("Loki chat");
 		
 		try {
 			Client client = new Client(window);

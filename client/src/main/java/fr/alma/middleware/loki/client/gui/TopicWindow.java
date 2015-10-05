@@ -20,7 +20,7 @@ import java.awt.Container;
 import java.awt.event.ActionListener;
 
 
-public class MainWindow extends JFrame {
+public class TopicWindow extends JFrame {
 	
 	private JLabel labelNickname;
 
@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
 
 	private JButton buttonSend;
 	
-	public MainWindow(String title) {
+	public TopicWindow(String title) {
 
 		super(title);
 
