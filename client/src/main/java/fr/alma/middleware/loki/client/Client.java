@@ -72,6 +72,11 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 	
 	public void topicRemoved(ITopic topic) throws RemoteException {
 		this.display.removeTopic(topic.getName());
+		if(this.childs.containsKey(topic)) {
+			this.subscribedTopics.remove(topic.getName());
+			ClientTopic child = this.childs.remove(topic);
+			child.close();
+		}
 	}
 	
 	public void actionPerformed(ActionEvent e) {

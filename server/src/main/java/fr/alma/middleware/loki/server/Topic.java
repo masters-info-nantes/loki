@@ -52,8 +52,7 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 		for(IClientTopic client : this.subscribers){
 			try {
 				client.newMessage(message);
-			}
-			catch(Exception ex) {
+			} catch(Exception ex) {
 				offlineClients.add(client);
 			}
         }

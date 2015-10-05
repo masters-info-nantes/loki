@@ -50,9 +50,15 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		ITopic topic = new Topic(title);
 		this.topics.put(title, topic);
 		
+		LinkedList offlineClients = new LinkedList<IClient>();
 		for(IClient client : this.clients) {
-			client.topicCreated(topic);
+			try {
+				client.topicCreated(topic);
+			} catch(Exception ex) {
+				offlineClients.add(client);
+			}
 		}
+		this.clients.removeAll(offlineClients);
 		
 		return topic;
 	}
@@ -62,9 +68,15 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 			ITopic previous = this.topics.remove(topic.getName());
 			
 			if(previous != null) {
+				LinkedList offlineClients = new LinkedList<IClient>();
 				for(IClient client : this.clients) {
-					client.topicRemoved(topic);
+					try {
+						client.topicRemoved(topic);
+					} catch(Exception ex) {
+						offlineClients.add(client);
+					}
 				}
+				this.clients.removeAll(offlineClients);
 			}
 		}
 	}
