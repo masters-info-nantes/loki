@@ -9,11 +9,17 @@ import fr.alma.middleware.loki.common.Message;
 public class App {
 	public static void main(String[] args) {
 		MainWindow mainWindow = new MainWindow("Loki chat -- main");
+
+		if(args.length >= 1){
+			RMIClient.changeServerIp(args[0]);
+		}
 		
 		try {
+			System.out.println("Connecting to " + RMIClient.getServerIp() + " server..");
+
 			RMIClient rmi = RMIClient.getInstance();
 			IServer server = (IServer) rmi.retrieve("Server");
-			
+
 			Client client = new Client(server,mainWindow);
 			mainWindow.listenCreateButton(client);
 			server.registerClient(client);

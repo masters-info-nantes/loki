@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 public class RMIClient {
 
 	// Server settings
-	private static final String SERVER_IP = "127.0.0.1";
+	private static String SERVER_IP = "127.0.0.1";
 	private static final int SERVER_PORT = 9999;
 
 	private static final String APP_NAME = "Loki";
@@ -36,5 +36,13 @@ public class RMIClient {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static String getServerIp(){
+		return RMIClient.SERVER_IP;
+	}
+
+	public static void changeServerIp(String serverIp){
+		RMIClient.SERVER_IP = serverIp;
 	}
 }

@@ -21,13 +21,8 @@ $ mvn compile exec:java
 
 ```
 $ cd client
-$ mvn compile exec:java
+$ mvn compile exec:java # -Dexec.args="127.0.0.1" (optionnal)
 ```
-
-## Todo
-- Create classes and add pseudo-code from google drive doc
-- Create graphic interface in client (JFrame, ..)
-- Test RMI on a side project
 
 ## Versions
 - Chat with fixed topic number
