@@ -11,19 +11,38 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import org.mapdb.*;
 
 public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
+	
+	private static String DB_TOPIC_PREFIX = "Topic.";
 	
 	private String name;
 	private Set<IClientTopic> subscribers;
 	private List<Message> messageHistory;
 	
-	public Topic(String name) throws RemoteException {
+	private DB db;
+	private Map<Integer,Message> dbHistory;
+	
+	public Topic(String name,DB db) throws RemoteException {
         super();
 		this.name = name;
         this.subscribers = new HashSet<IClientTopic>();
 		this.messageHistory = new ArrayList<Message>();
+		this.db = db;
+		
+		if(this.db.exists(DB_TOPIC_PREFIX+this.name)) {
+			this.dbHistory = this.db.getHashMap(DB_TOPIC_PREFIX+this.name);
+			for(int i=0 ; i<this.dbHistory.size() ; i++) {
+				Message msg = this.dbHistory.get(i);
+				msg.setTopic(this);
+				this.messageHistory.add(i,msg);
+			}
+		} else {
+			this.dbHistory = this.db.createHashMap(DB_TOPIC_PREFIX+this.name).make();
+		}
     }
 	
 	public String getName() throws RemoteException {
@@ -46,8 +65,9 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 
 	@Override
 	public void broadcast(Message message) throws RemoteException {
+		this.dbHistory.put(this.messageHistory.size(),message);
 		this.messageHistory.add(message);
-
+		
 		LinkedList offlineClients = new LinkedList<IClientTopic>();
 		for(IClientTopic client : this.subscribers){
 			try {
