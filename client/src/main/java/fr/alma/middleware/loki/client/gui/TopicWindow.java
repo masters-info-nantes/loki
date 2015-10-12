@@ -1,5 +1,7 @@
 package fr.alma.middleware.loki.client.gui;
 
+import fr.alma.middleware.loki.client.ClientTopic;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -24,6 +26,8 @@ import java.awt.event.WindowListener;
 
 public class TopicWindow extends JFrame implements WindowListener {
 
+	private ClientTopic clientTopic;
+	
 	private JTextField textMessage;
 	private JScrollPane scrollHistory;
 	private JTextPane textHistory;
@@ -89,7 +93,7 @@ public class TopicWindow extends JFrame implements WindowListener {
 	/** Sets topic name in window title
 	 * @param topicName The new topic name of the window. If {@code null} remove topic name in window title.
 	 */
-	public void setCurrentTopicName(String topicName) {
+	public void setTopicName(String topicName) {
 		String originalTitle = this.getTitle();
 		int indexSeperator = originalTitle.lastIndexOf(" -- ");
 		if(indexSeperator != -1) {
@@ -100,6 +104,15 @@ public class TopicWindow extends JFrame implements WindowListener {
 		} else {
 			this.setTitle(originalTitle);
 		}
+	}
+	
+	public void setClientTopic(ClientTopic clientTopic) {
+		this.clientTopic = clientTopic;
+	}
+	
+	public void close() {
+		setVisible(false);
+		dispose();
 	}
 	
 	// WindowListener methods
@@ -113,8 +126,9 @@ public class TopicWindow extends JFrame implements WindowListener {
 	}
 
 	public void windowClosing(WindowEvent e) {
-		setVisible(false);
-		dispose();
+		if(this.clientTopic != null) {
+			this.clientTopic.close();
+		}
 	}
 
 	public void windowDeactivated(WindowEvent e) {

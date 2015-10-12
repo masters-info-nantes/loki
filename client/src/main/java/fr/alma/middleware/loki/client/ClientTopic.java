@@ -19,7 +19,7 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 	
 	private Client parent;
 	private TopicWindow display;
-	private ITopic currentTopic;
+	private ITopic topic;
 	
 	public ClientTopic(Client parent,TopicWindow display) throws RemoteException {
 		super();
@@ -35,8 +35,8 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 		);
 	}
 		
-	public void setCurrentTopic(ITopic topic) {
-		this.currentTopic = topic;
+	public void setTopic(ITopic topic) {
+		this.topic = topic;
 		
 		try {
 			for(Message msg : topic.history()){
@@ -47,8 +47,8 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 		}
 	}
 	
-	public ITopic getCurrentTopic() {
-		return this.currentTopic;
+	public ITopic getTopic() {
+		return this.topic;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -58,7 +58,7 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 				String message = this.display.getMessage();
 				this.display.setMessage("");
 				try {
-					this.currentTopic.broadcast(new Message(nickname,this.currentTopic,message));
+					this.topic.broadcast(new Message(nickname,this.topic,message));
 				} catch(RemoteException ex) {
 					System.err.println("Can't send message ["+nickname+","+message+"]");
 					ex.printStackTrace();
@@ -70,7 +70,8 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 	}
 	
 	public void close() {
-		this.display.windowClosing(null);
+		this.display.close();
+		this.parent.closeTopic(this.topic);
 	}
 	
 	public void bringToFront() {
