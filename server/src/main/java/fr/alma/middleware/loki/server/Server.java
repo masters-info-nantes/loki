@@ -19,7 +19,7 @@ import org.mapdb.*;
 
 public class Server extends UnicastRemoteObject implements IServer,Serializable {
 
-	private static String DB_TOPIC_LIST = "topicList";
+	private final static String DB_TOPIC_LIST = "topicList";
 	private HashMap<String, ITopic> topics;
 	private List<IClient> clients;
 	
@@ -32,19 +32,19 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		this.clients = new LinkedList<IClient>();
 		this.topics = new HashMap<String, ITopic>();
 		
-		this.db = DBMaker.newFileDB(new File("storage.db"))
+		this.db = DBMaker.fileDB(new File("storage.db"))
 			.closeOnJvmShutdown()
 			.transactionDisable()// no need to commit to save
 			.make();
 		
 		if(db.exists(DB_TOPIC_LIST)) {
-			this.dbTopics = this.db.getTreeSet(DB_TOPIC_LIST);
+			this.dbTopics = this.db.treeSet(DB_TOPIC_LIST);
 			for(String topicName : this.dbTopics) {
 				ITopic topic = new Topic(topicName,this.db);
 				this.topics.put(topicName, topic);
 			}
 		} else {
-			this.dbTopics = this.db.createTreeSet(DB_TOPIC_LIST).make();
+			this.dbTopics = this.db.treeSet(DB_TOPIC_LIST);
 			try {
 				createTopic(ITopic.GENERAL_TOPIC_NAME);
 			}
@@ -88,6 +88,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	public void removeTopic(ITopic topic) throws RemoteException {
 		if(!topic.getName().equals(ITopic.GENERAL_TOPIC_NAME)) {
 			ITopic previous = this.topics.remove(topic.getName());
+			this.db.delete(Topic.DB_TOPIC_PREFIX+topic.getName());
 			this.dbTopics.remove(topic.getName());
 			
 			if(previous != null) {

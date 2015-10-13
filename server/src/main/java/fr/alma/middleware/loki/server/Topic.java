@@ -17,7 +17,7 @@ import org.mapdb.*;
 
 public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 	
-	private static String DB_TOPIC_PREFIX = "Topic.";
+	public final static String DB_TOPIC_PREFIX = "Topic.";
 	
 	private String name;
 	private Set<IClientTopic> subscribers;
@@ -34,14 +34,14 @@ public class Topic extends UnicastRemoteObject implements ITopic, Serializable {
 		this.db = db;
 		
 		if(this.db.exists(DB_TOPIC_PREFIX+this.name)) {
-			this.dbHistory = this.db.getHashMap(DB_TOPIC_PREFIX+this.name);
+			this.dbHistory = this.db.hashMap(DB_TOPIC_PREFIX+this.name);
 			for(int i=0 ; i<this.dbHistory.size() ; i++) {
 				Message msg = this.dbHistory.get(i);
 				msg.setTopic(this);
 				this.messageHistory.add(i,msg);
 			}
 		} else {
-			this.dbHistory = this.db.createHashMap(DB_TOPIC_PREFIX+this.name).make();
+			this.dbHistory = this.db.hashMap(DB_TOPIC_PREFIX+this.name);
 		}
     }
 	
