@@ -3,7 +3,7 @@ package fr.alma.middleware.loki.common;
 import java.util.List;
 import java.rmi.*;
 
-public interface IServer extends Remote {
+public interface IServer extends IClient {
 
 	public ITopic getTopic(String title) throws RemoteException;
 	public List<String> getTopicList() throws RemoteException;

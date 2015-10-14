@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.mapdb.*;
 
 public class Server extends UnicastRemoteObject implements IServer,Serializable {
@@ -23,12 +24,16 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	private HashMap<String, ITopic> topics;
 	private List<IClient> clients;
 	
+	private String nickname;
+	
 	private DB db;
 	private Set<String> dbTopics;
 	
 	public Server() throws RemoteException {
 		super();
-
+		
+		this.nickname = UUID.randomUUID().toString();
+		
 		this.clients = new LinkedList<IClient>();
 		this.topics = new HashMap<String, ITopic>();
 		
@@ -63,6 +68,10 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	}
 	
 	public ITopic createTopic(String title) throws RemoteException,TopicAlreadyExistedException {
+		return this.createTopic(title,true);
+	}
+	
+	public ITopic createTopic(String title, boolean broadcastChange) throws RemoteException,TopicAlreadyExistedException {
 
 		if(this.topics.containsKey(title)) {
 			throw new TopicAlreadyExistedException();
@@ -86,6 +95,10 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	}
 	
 	public void removeTopic(ITopic topic) throws RemoteException {
+		this.removeTopic(topic,true);
+	}
+	
+	public void removeTopic(ITopic topic, boolean broadcastChange) throws RemoteException {
 		if(!topic.getName().equals(ITopic.GENERAL_TOPIC_NAME)) {
 			ITopic previous = this.topics.remove(topic.getName());
 			this.db.delete(Topic.DB_TOPIC_PREFIX+topic.getName());
@@ -115,4 +128,26 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	public void unregisterClient(IClient client) throws RemoteException {
 		this.clients.remove(client);
 	}
+	
+	
+	public String getNickname() throws RemoteException {
+		return this.nickname;
+	}
+	
+	public void setNickname(String nickname) throws RemoteException {
+		this.nickname = nickname;
+	}
+	
+	public void topicCreated(ITopic topic) throws RemoteException {
+		try {
+			createTopic(topic.getName(),false);
+		} catch(TopicAlreadyExistedException ex) {
+			System.out.println("TopicAlreadyExistedException "+topic.getName());
+		}
+	}
+	
+	public void topicRemoved(ITopic topic) throws RemoteException {
+		removeTopic(getTopic(topic.getName()),false);
+	}
+	
 }
