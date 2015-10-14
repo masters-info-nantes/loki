@@ -1,4 +1,6 @@
-package fr.alma.middleware.loki.server;
+package fr.alma.middleware.loki.common;
+
+import fr.alma.middleware.loki.common.ServerAddress;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -18,18 +20,23 @@ public class RMIServer {
 
 	// Singleton
 	private static RMIServer instance;
+	
+	private ServerAddress address;
 
 	private Registry localRegistry;
 
 	public static RMIServer getInstance() throws RemoteException {
 
 		if(RMIServer.instance == null){
-			RMIServer.instance = new RMIServer();
+			RMIServer.instance = new RMIServer(
+				new ServerAddress(RMIServer.SERVER_IP,RMIServer.SERVER_PORT)
+			);
 		}
 		return RMIServer.instance;
 	}
 
-	private RMIServer() throws RemoteException {
+	private RMIServer(ServerAddress address) throws RemoteException {
+		this.address = address;
 		// create a Security Manager that allow everything
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager() {
@@ -44,13 +51,28 @@ public class RMIServer {
 	}
 
 	public void share(UnicastRemoteObject object, String name) throws RemoteException {
-		String url = "rmi://" + RMIServer.SERVER_IP +":" + RMIServer.SERVER_PORT + "/" + RMIServer.APP_NAME + "/" + name;
+		String url = "rmi://" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIServer.APP_NAME + "/" + name;
 		try {
 			Naming.rebind(url, object);
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			System.err.println("RMI: Object URL malformed");
 			e.printStackTrace();
 		}
+	}
+	
+	public String getIp(){
+		return this.address.getIp();
+	}
+	
+	public int getPort(){
+		return this.address.getPort();
+	}
+	
+	public void setIp(String ip){
+		this.address.setIp(ip);
+	}
+	
+	public void setPort(int port){
+		this.address.setPort(port);
 	}
 }

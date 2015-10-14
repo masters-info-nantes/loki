@@ -23,7 +23,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	private final static String DB_TOPIC_LIST = "topicList";
 	private HashMap<String, ITopic> topics;
 	private List<IClient> clients;
-	
+	private List<IServer> servers;
 	private String nickname;
 	
 	private DB db;
@@ -35,6 +35,8 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		this.nickname = UUID.randomUUID().toString();
 		
 		this.clients = new LinkedList<IClient>();
+		this.servers = new LinkedList<IServer>();
+		this.servers.add(this);
 		this.topics = new HashMap<String, ITopic>();
 		
 		this.db = DBMaker.fileDB(new File("storage.db"))
@@ -68,10 +70,6 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	}
 	
 	public ITopic createTopic(String title) throws RemoteException,TopicAlreadyExistedException {
-		return this.createTopic(title,true);
-	}
-	
-	public ITopic createTopic(String title, boolean broadcastChange) throws RemoteException,TopicAlreadyExistedException {
 
 		if(this.topics.containsKey(title)) {
 			throw new TopicAlreadyExistedException();
@@ -95,10 +93,6 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	}
 	
 	public void removeTopic(ITopic topic) throws RemoteException {
-		this.removeTopic(topic,true);
-	}
-	
-	public void removeTopic(ITopic topic, boolean broadcastChange) throws RemoteException {
 		if(!topic.getName().equals(ITopic.GENERAL_TOPIC_NAME)) {
 			ITopic previous = this.topics.remove(topic.getName());
 			this.db.delete(Topic.DB_TOPIC_PREFIX+topic.getName());
@@ -129,6 +123,19 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		this.clients.remove(client);
 	}
 	
+	public void registerServer(IServer server) throws RemoteException {
+		this.servers.add(server);
+		this.registerClient(server);
+	}
+	
+	public void unregisterServer(IServer server) throws RemoteException {
+		this.servers.remove(server);
+		this.unregisterClient(server);
+	}
+	
+	public List<IServer> getRegisteredServer() throws RemoteException {
+		return this.servers;
+	}
 	
 	public String getNickname() throws RemoteException {
 		return this.nickname;
@@ -140,14 +147,15 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	
 	public void topicCreated(ITopic topic) throws RemoteException {
 		try {
-			createTopic(topic.getName(),false);
+			createTopic(topic.getName());
 		} catch(TopicAlreadyExistedException ex) {
+			// TODO verify topic up-to-date
 			System.out.println("TopicAlreadyExistedException "+topic.getName());
 		}
 	}
 	
 	public void topicRemoved(ITopic topic) throws RemoteException {
-		removeTopic(getTopic(topic.getName()),false);
+		removeTopic(getTopic(topic.getName()));
 	}
 	
 }

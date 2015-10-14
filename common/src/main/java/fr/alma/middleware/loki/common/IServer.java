@@ -12,5 +12,9 @@ public interface IServer extends IClient {
 	
 	public void registerClient(IClient client) throws RemoteException;
 	public void unregisterClient(IClient client) throws RemoteException;
+	
+	public void registerServer(IServer server) throws RemoteException;
+	public void unregisterServer(IServer server) throws RemoteException;
+	public List<IServer> getRegisteredServer() throws RemoteException;
 }
 
