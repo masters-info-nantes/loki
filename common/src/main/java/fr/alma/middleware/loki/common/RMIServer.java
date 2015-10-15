@@ -47,17 +47,12 @@ public class RMIServer {
 			});
 		}
 
-		this.localRegistry = LocateRegistry.createRegistry(RMIServer.SERVER_PORT);
+		this.localRegistry = LocateRegistry.createRegistry(this.address.getPort());
 	}
 
 	public void share(UnicastRemoteObject object, String name) throws RemoteException {
 		String url = "rmi://" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIServer.APP_NAME + "/" + name;
-		try {
-			Naming.rebind(url, object);
-		} catch (MalformedURLException e) {
-			System.err.println("RMI: Object URL malformed");
-			e.printStackTrace();
-		}
+		this.localRegistry.rebind(url, object);
 	}
 	
 	public String getIp(){
