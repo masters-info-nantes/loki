@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class ClientTopic extends UnicastRemoteObject implements IClientTopic,ActionListener,Serializable {
@@ -29,10 +30,22 @@ public class ClientTopic extends UnicastRemoteObject implements IClientTopic,Act
 	}
 	
 	public void newMessage(Message message) throws RemoteException {
-		this.display.appendToHistory(
-			"\n" + message.getAuthor() + " : " + message.getMessage(),
-			this.parent.getUserColor(message.getAuthor())
-		);
+		if(message.getAuthor().equalsIgnoreCase("nyan-cat")) {
+			String str = message.getAuthor() + " : " + message.getMessage();
+			List<Color> rainbow = ColorGenerator.rainbow(str.length());
+			this.display.appendToHistory("\n");
+			for(int i=0 ; i<str.length() ; i++) {
+				this.display.appendToHistory(
+					Character.toString(str.charAt(i)),
+					rainbow.get(i)
+				);
+			}
+		} else {
+			this.display.appendToHistory(
+				"\n" + message.getAuthor() + " : " + message.getMessage(),
+				this.parent.getUserColor(message.getAuthor())
+			);
+		}
 	}
 		
 	public void setTopic(ITopic topic) {

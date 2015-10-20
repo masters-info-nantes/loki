@@ -180,6 +180,7 @@ public class TopicWindow extends JFrame implements WindowListener,KeyListener {
 	
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			konamiCodeStep = 0;
 			this.clientTopic.actionPerformed(null);
 		} else if(e.getKeyCode() == KONAMI_CODE[konamiCodeStep]) {
 			konamiCodeStep++;

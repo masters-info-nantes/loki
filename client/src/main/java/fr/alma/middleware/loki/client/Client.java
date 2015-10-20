@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.Random;
 import javax.swing.JOptionPane;
 
 public class Client extends UnicastRemoteObject implements IClient,ActionListener,Serializable {
@@ -39,8 +38,7 @@ public class Client extends UnicastRemoteObject implements IClient,ActionListene
 		
 	public Color getUserColor(String nickname) {
 		if(!this.usersColor.containsKey(nickname)) {
-			Random rand = new Random();
-			Color c = new Color(rand.nextInt(256),rand.nextInt(256),rand.nextInt(256));
+			Color c = ColorGenerator.random();
 			this.usersColor.put(nickname,c);
 		}
 		return this.usersColor.get(nickname);
