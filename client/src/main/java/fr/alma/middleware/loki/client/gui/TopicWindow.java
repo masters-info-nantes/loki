@@ -20,11 +20,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 
-public class TopicWindow extends JFrame implements WindowListener {
+public class TopicWindow extends JFrame implements WindowListener,KeyListener {
 
 	private ClientTopic clientTopic;
 	
@@ -33,9 +35,21 @@ public class TopicWindow extends JFrame implements WindowListener {
 	private JTextPane textHistory;
 	private JButton buttonSend;
 	
+	private static final int[] KONAMI_CODE = {
+		KeyEvent.VK_UP, KeyEvent.VK_UP,
+		KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
+		KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+		KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT,
+		KeyEvent.VK_B, KeyEvent.VK_A
+	};
+	
+	private int konamiCodeStep = 0;
+	private boolean konamiCodeState = false;
+	
 	public TopicWindow(String title) {
 		super(title);
 		this.textHistory = new JTextPane();
+		this.textHistory.setEditable(false);
 		this.scrollHistory = new JScrollPane(
 			this.textHistory,
 			JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -58,11 +72,19 @@ public class TopicWindow extends JFrame implements WindowListener {
 		super.setSize(400, 600);
 		super.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(this);
+		
+		this.textMessage.addKeyListener(this);
+		
 		super.setVisible(true);
 	}
 	
 	public String getMessage() {
-		return this.textMessage.getText();
+		if(this.konamiCodeState) {
+			String msg = this.textMessage.getText();
+			return new StringBuffer(msg).reverse().toString();
+		} else {
+			return this.textMessage.getText();
+		}
 	}
 	
 	public void appendToHistory(String text) {
@@ -76,10 +98,12 @@ public class TopicWindow extends JFrame implements WindowListener {
 		aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
 		aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
 		
+		this.textHistory.setEditable(true);
 		int len = this.textHistory.getDocument().getLength();
 		this.textHistory.setCaretPosition(len);
 		this.textHistory.setCharacterAttributes(aset, false);
 		this.textHistory.replaceSelection(text);
+		this.textHistory.setEditable(false);
     }
 	
 	public void setMessage(String message) {
@@ -144,6 +168,31 @@ public class TopicWindow extends JFrame implements WindowListener {
 	}
 
 	public void windowOpened(WindowEvent e) {
+		// Nothing to do
+	}
+	
+	// KeyListener methods
+	
+	public void keyPressed(KeyEvent e) {
+		// Nothing to do
+	}
+	
+	
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+			this.clientTopic.actionPerformed(null);
+		} else if(e.getKeyCode() == KONAMI_CODE[konamiCodeStep]) {
+			konamiCodeStep++;
+			if(konamiCodeStep >= KONAMI_CODE.length) {
+				konamiCodeState = !konamiCodeState;
+				konamiCodeStep = 0;
+			}
+		} else {
+			konamiCodeStep = 0;
+		}
+	}
+	
+	public void keyTyped(KeyEvent e) {
 		// Nothing to do
 	}
 }
