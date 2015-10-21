@@ -26,7 +26,6 @@ public class RMIServer {
 	private Registry localRegistry;
 
 	public static RMIServer getInstance() throws RemoteException {
-
 		if(RMIServer.instance == null){
 			RMIServer.instance = new RMIServer(
 				new ServerAddress(RMIServer.SERVER_IP,RMIServer.SERVER_PORT)
@@ -46,12 +45,13 @@ public class RMIServer {
 				}
 			});
 		}
-
-		this.localRegistry = LocateRegistry.createRegistry(this.address.getPort());
 	}
 
 	public void share(UnicastRemoteObject object, String name) throws RemoteException {
-		String url = "rmi://" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIServer.APP_NAME + "/" + name;
+		if(this.localRegistry == null) {
+			this.localRegistry = LocateRegistry.createRegistry(this.address.getPort());
+		}
+		String url = "//" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIServer.APP_NAME + "/" + name;
 		this.localRegistry.rebind(url, object);
 	}
 	
@@ -69,5 +69,6 @@ public class RMIServer {
 	
 	public void setPort(int port){
 		this.address.setPort(port);
+		this.localRegistry = null;
 	}
 }

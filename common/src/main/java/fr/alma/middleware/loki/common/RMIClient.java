@@ -7,6 +7,8 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class RMIClient {
 
@@ -20,7 +22,9 @@ public class RMIClient {
 	private static RMIClient instance;
 
 	private ServerAddress address;
-	
+
+	private Registry localRegistry;
+
 	private RMIClient(ServerAddress address) {
 		this.address = address;
 	}
@@ -35,15 +39,13 @@ public class RMIClient {
 	}
 
 	public Remote retrieve(String name) throws RemoteException {
-		System.out.println("rmi://" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIClient.APP_NAME + "/" + name);
 		try {
-			return Naming.lookup("rmi://" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIClient.APP_NAME + "/" + name);
+			if(this.localRegistry == null) {
+				this.localRegistry = LocateRegistry.getRegistry(this.address.getIp(), this.address.getPort());
+			}
+			return this.localRegistry.lookup("//" + this.address.getIp() +":" + this.address.getPort() + "/" + RMIClient.APP_NAME + "/" + name);
 		}
 		catch (NotBoundException e) {
-			e.printStackTrace();
-		}
-		catch (MalformedURLException e) {
-			System.err.println("RMI: Retrieve malformed URL");
 			e.printStackTrace();
 		}
 		return null;
@@ -63,5 +65,6 @@ public class RMIClient {
 	
 	public void setServerPort(int serverPort){
 		this.address.setPort(serverPort);
+		this.localRegistry = null;
 	}
 }
