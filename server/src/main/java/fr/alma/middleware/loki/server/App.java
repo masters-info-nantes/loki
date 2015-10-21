@@ -6,6 +6,7 @@ import fr.alma.middleware.loki.common.RMIServer;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
 	
@@ -44,13 +45,31 @@ public class App {
 					}
 				}
 			}
-			System.out.println("Running server on " + rmi.getIp() + ":" + rmi.getPort());
 			rmi.share(server,"Server");
-
-			while(true);
+			System.out.println("Running server on " + rmi.getIp() + ":" + rmi.getPort());
+			
+			boolean run = true;
+			Scanner in = new Scanner(System.in);
+			String cmd = "";
+			
+			while(run) {
+				System.out.print(" > ");
+				cmd = in.nextLine();
+				switch(cmd) {
+				case "stop":
+					stopServer();
+				default:
+					System.out.println("Unrecognize command.");
+				}
+			}
+			
 		} catch(RemoteException ex) {
 			System.err.println("Can't create remote server object");
             ex.printStackTrace();
 		}
     }
+    
+    public static void stopServer() {
+		System.exit(0);
+	}
 }
