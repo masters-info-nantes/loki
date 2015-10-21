@@ -10,19 +10,26 @@ import java.util.List;
 public class App {
 	
     public static void main(String[] args) {
+		String databasePath = "storage.db";
+		if(args.length >= 1) {
+			databasePath = args[0];
+		} else {
+			System.err.println("You must specify a database path");
+			System.exit(0);
+		}
 		try {
-			Server server = new Server();
+			Server server = new Server(databasePath);
 
 			RMIServer rmi = RMIServer.getInstance();
-			if(args.length >= 1){
-				String[] address = args[0].split(":");
+			if(args.length >= 2){
+				String[] address = args[1].split(":");
 				rmi.setIp(address[0]);
 				if(address.length > 1) {
 					rmi.setPort(Integer.parseInt(address[1]));
 				}
 				
-				if(args.length >= 2) {
-					String[] secondAddress = args[1].split(":");
+				if(args.length >= 3) {
+					String[] secondAddress = args[2].split(":");
 					if(secondAddress.length > 1) {
 						RMIClient rmiClient = RMIClient.getInstance();
 						rmiClient.setServerIp(secondAddress[0]);

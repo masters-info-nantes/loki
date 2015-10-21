@@ -29,7 +29,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 	private DB db;
 	private Set<String> dbTopics;
 	
-	public Server() throws RemoteException {
+	public Server(String dbPath) throws RemoteException {
 		super();
 		
 		this.nickname = UUID.randomUUID().toString();
@@ -39,7 +39,7 @@ public class Server extends UnicastRemoteObject implements IServer,Serializable 
 		this.servers.add(this);
 		this.topics = new HashMap<String, ITopic>();
 		
-		this.db = DBMaker.fileDB(new File("storage.db"))
+		this.db = DBMaker.fileDB(new File(dbPath))
 			.closeOnJvmShutdown()
 			.transactionDisable()// no need to commit to save
 			.make();
